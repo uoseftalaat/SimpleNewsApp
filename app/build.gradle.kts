@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
+    id("kotlin-kapt")
 }
 
 android {
@@ -16,6 +16,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
     viewBinding{
         enable = true
@@ -31,17 +32,20 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
 
     val room_version = "2.5.2"
+    val lifecycle_version = "2.6.1"
+    val activity_version = "1.7.2"
+    val fragment_version = "1.6.1"
 
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -60,17 +64,23 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 
     //coroutines lifecycle scope
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     //recycler view
     implementation("androidx.recyclerview:recyclerview:1.3.1")
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 
-
+    // room
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
     // To use Kotlin annotation processing tool (kapt)
-    ksp("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
+
+
+
+    implementation("androidx.activity:activity-ktx:$activity_version")
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
+
 }

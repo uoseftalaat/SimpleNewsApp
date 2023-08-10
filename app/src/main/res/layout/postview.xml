@@ -33,4 +33,12 @@
         android:textSize="18dp"
         tools:text="this is the example of a post on the Api"></TextView>
 
+    <ImageView
+        android:id="@+id/favButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/star_foreground"
+        android:layout_marginLeft="340dp"
+        ></ImageView>
+
 </LinearLayout>

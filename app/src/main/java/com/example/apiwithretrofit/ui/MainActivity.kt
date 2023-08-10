@@ -3,42 +3,36 @@ package com.example.apiwithretrofit.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.apiwithretrofit.api.PostRetrofit
 import com.example.apiwithretrofit.databinding.ActivityMainBinding
 import com.example.apiwithretrofit.recyclerview.PostRecyclerView
-import retrofit2.HttpException
-import java.io.IOException
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.example.apiwithretrofit.api.Source
+
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var postAdapter:PostRecyclerView
+    private val viewModel:MainViewModel by viewModels {
+        object : ViewModelProvider.Factory{
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return MainViewModel(application) as T
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupRecyclerView()
-        lifecycleScope.launchWhenCreated {
-            val response = try {
-                PostRetrofit.retrofitApi.getAllTodos()
-            }catch (e:HttpException){
-                Log.i("retro","http")
-                return@launchWhenCreated
 
-            }catch (e:IOException){
-                Log.i("retro","ioEx")
-                return@launchWhenCreated
-            }
-            if(response.isSuccessful && response.body() != null){
-                postAdapter.posts = response.body()!!.sources
-            }
-            else{
-                Log.i("retro","fail")
-            }
+        viewModel.news.observe(this) { it ->
+            Log.i("the size of ",it.size.toString())
+            setupRecyclerView()
+            postAdapter.posts = it
         }
-
-
     }
 
 
@@ -46,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         postAdapter = PostRecyclerView()
         adapter = postAdapter
         layoutManager = LinearLayoutManager(this@MainActivity)
-
 
     }
 }
