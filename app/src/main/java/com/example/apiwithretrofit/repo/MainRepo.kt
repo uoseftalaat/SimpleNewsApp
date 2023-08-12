@@ -12,20 +12,21 @@ import java.io.IOException
 
 class MainRepo(private val dao:Dao) {
     suspend fun getOnlineData(): List<Source>? {
-            val response= try {
+            val response = try {
                 PostRetrofit.retrofitApi.getAllTodos()
             }catch (e: HttpException){
-                Log.i("retro","http")
+                Log.i("arsotnaosydn","http")
                 return null
             }catch (e: IOException){
-                Log.i("retro","ioEx")
+                Log.i("arsotnaosydn","ioEx")
                 return null
             }
         if(response != null && response.isSuccessful){
             return response.body()!!.sources
         }
-        else
+        else{
             return null
+        }
     }
 
     suspend fun insertToFav(news:Source) = dao.insertToFav(news)

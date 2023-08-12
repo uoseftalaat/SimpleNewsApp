@@ -12,12 +12,14 @@ abstract class NewsDatabase:RoomDatabase() {
 
     companion object {
         private var instance: NewsDatabase? = null
+        
         @Synchronized
         fun getInstance(ctx: Context): NewsDatabase {
             if(instance == null)
                 instance = Room.databaseBuilder(ctx.applicationContext, NewsDatabase::class.java,
                     "note_database")
                     .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
                     .build()
 
             return instance!!

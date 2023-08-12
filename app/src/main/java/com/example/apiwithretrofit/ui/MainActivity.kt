@@ -2,44 +2,57 @@ package com.example.apiwithretrofit.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.apiwithretrofit.databinding.ActivityMainBinding
-import com.example.apiwithretrofit.recyclerview.PostRecyclerView
+import com.example.apiwithretrofit.recyclerview.FavRecyclerView
 import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.apiwithretrofit.R
 import com.example.apiwithretrofit.api.Source
 
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    lateinit var postAdapter:PostRecyclerView
+
     private val viewModel:MainViewModel by viewModels {
         object : ViewModelProvider.Factory{
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return MainViewModel(application) as T
+                return MainViewModel(this@MainActivity) as T
             }
         }
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val apiFragment = ApiFragment()
+        val favFragment = FavFragment()
 
-        viewModel.news.observe(this) { it ->
-            Log.i("the size of ",it.size.toString())
-            setupRecyclerView()
-            postAdapter.posts = it
+        setCurrentFragment(apiFragment)
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.favButton -> {
+                    viewModel.getAllFav()
+                    setCurrentFragment(favFragment)
+                }
+                R.id.apibutton -> {
+                    viewModel.getOnlineData()
+                    setCurrentFragment(apiFragment)
+                }
+            }
+            true
         }
     }
 
-
-    fun setupRecyclerView() = binding.rvPost.apply {
-        postAdapter = PostRecyclerView()
-        adapter = postAdapter
-        layoutManager = LinearLayoutManager(this@MainActivity)
-
+    fun setCurrentFragment(fragment: Fragment) = supportFragmentManager.beginTransaction().apply {
+        replace(R.id.fragmentlayout,fragment)
+        commit()
     }
+
+
+
 }

@@ -46,6 +46,7 @@ dependencies {
     val lifecycle_version = "2.6.1"
     val activity_version = "1.7.2"
     val fragment_version = "1.6.1"
+    val nav_version = "2.6.0"
 
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -78,9 +79,14 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
 
 
-
-
     implementation("androidx.activity:activity-ktx:$activity_version")
     implementation("androidx.fragment:fragment-ktx:$fragment_version")
+
+    //navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+
+    //bottom navigation view
+    implementation ("com.google.android.material:material:1.2.1")
 
 }

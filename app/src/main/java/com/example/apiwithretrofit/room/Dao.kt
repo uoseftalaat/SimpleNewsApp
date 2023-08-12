@@ -9,7 +9,6 @@ import com.example.apiwithretrofit.api.Source
 
 @Dao
 interface Dao {
-
     @Insert
     fun insertToFav(news: Source)
 
